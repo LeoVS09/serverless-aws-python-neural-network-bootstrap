@@ -1,6 +1,6 @@
-# Serverless ASW Python Bootstrap
+# Serverless ASW Python Neural Network Bootstrap
 
-Base setup of environment and tools to start develop on lambda functions from zero (minimal) configuration
+About Base setup of environment and tools to start develop on lambda functions with neural network under the hood from zero configuration
 
 Contains:
 
