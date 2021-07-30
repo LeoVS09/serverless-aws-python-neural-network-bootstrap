@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+
+   serverless-dev-enviroment:
+      build: .
+      ports:
+        - 8080:8080
+      runtime: nvidia
+      volumes:
+        - .:/app/.
+      env_file:
+        ./.env

@@ -1,0 +1,11 @@
+{
+    "name": "serverless-aws-python-bootstrap",
+    "version": "0.1.0",
+    "description": "Base setup of environment and tools to start develop on lambda functions from zero (minimal) configuration",
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+      "serverless-python-requirements": "^3.0.5",
+      "serverless-secrets-plugin": "^0.1.0"
+    }
+}

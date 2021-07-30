@@ -13,21 +13,33 @@
 
 service: serverless-aws-python-bootstrap
 # app and org for use with dashboard.serverless.com
-#app: your-app-name
-#org: your-org-name
+app: example
+org: leovs09
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
 frameworkVersion: '2'
 
+plugins:
+  - serverless-python-requirements
+  - serverless-secrets-plugin
+
 provider:
   name: aws
   runtime: python3.8
   lambdaHashingVersion: 20201221
+  
+  stage: ${opt:stage, 'dev'}
+  
+  apiGateway:
+    minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
+  
+  environment:
+    # you can define service wide environment variables here
+    SECRET_SERVICE_KEY: ${self:custom.secrets.SECRET_SERVICE_KEY}
 
-# you can overwrite defaults here
-#  stage: dev
-#  region: us-east-1
+  # you can overwrite defaults here
+  # region: us-east-1
 
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
@@ -45,17 +57,19 @@ provider:
 #            - "Ref" : "ServerlessDeploymentBucket"
 #            - "/*"
 
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
-
 # you can add packaging information here
-#package:
-#  patterns:
-#    - '!exclude-me.py'
-#    - '!exclude-me-dir/**'
-#    - include-me.py
-#    - include-me-dir/**
+package:
+ patterns:
+    - node_modules/**
+    - .idea/**
+    - .requirements/**
+    - env/**
+    - README.md
+    - package.json
+    - package-lock.json
+    - requirements.txt
+    - .env
+    - bin/**
 
 functions:
   hello:
@@ -63,10 +77,10 @@ functions:
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
-#    events:
-#      - httpApi:
-#          path: /users/create
-#          method: get
+    events:
+      - httpApi:
+          path: /hello
+          method: get
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
 #      - schedule: rate(10 minutes)
@@ -97,8 +111,9 @@ functions:
 #            path: /hello
 
 #    Define function environment variables here
-#    environment:
-#      variable2: value2
+    environment:
+      STAGE: ${self:provider.stage}
+      SECRET_FUNCTION_TOKEN: ${env:SECRET_FUNCTION_TOKEN}
 
 # you can add CloudFormation resource templates here
 #resources:
@@ -111,3 +126,7 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
