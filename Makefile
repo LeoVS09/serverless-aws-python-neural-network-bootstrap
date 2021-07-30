@@ -1,7 +1,7 @@
  
 #!/usr/bin/env make
 
-.PHONY: setup read-local-enviroment docker-console console
+.PHONY: setup read-local-enviroment docker-console console install
 
 # ---------------------------------------------------------------------------------------------------------------------
 # SETUP
@@ -12,6 +12,9 @@ setup:
 
 read-local-enviroment:
 	. ./dev.env && echo "$$SECRET_FUNCTION_TOKEN"
+
+install: 
+	pipenv install --system
 
 # ---------------------------------------------------------------------------------------------------------------------
 # DOCKER
@@ -97,18 +100,5 @@ decript-prod:
 
 # --------------------------------------------------- TESTS --------------------------------------------------------------- 
 
-# Add test to existing handler
-# Example: make create-test hello
-create-test:
-	sls create test -f $(call args)
-
-# Tests can be run directly using mocha or using the "invoke test" command
 test: 
-	sls webpack -o testBuild
-	sls invoke test --root testBuild/service
-	rm -rf testBuild
-
-# Run test of function directly
-# Example: make test-fn hello
-test-fn:
-	sls invoke test -f $(call args)
+	pytest

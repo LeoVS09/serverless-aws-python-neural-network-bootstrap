@@ -7,7 +7,8 @@ Contains:
 * python enviroment setup
 * Enviroment variables - setup for work with enviroment variables, you can setup their local and in produciton
 * Encripted file variables - setup for store variables in encripted file
-
+* Tests - you can develop you function by run test of functions locally
+  
 ## Servless from scratch tutorial
 
 This tutorial use `make` util (it available for linux and windows) to create one file which commands you can use,
@@ -76,6 +77,13 @@ Login to serverless
 ```bash
 serverless login
 ```
+
+### Dependencies
+
+For manage dependencies used few tools: `pipenv` and `serverless-python-requirements`
+
+* `pipenv` - allow install dependencies locally and in docker, manage virtual enviroment and lock file for control dependencies. It uses Pipfile and Pipfile.lock. For install some package justt use `pipenv install <package>`
+* `serverless-python-requirements` - install and package dependencies for your lambda function before deploy. It configurated in `serverless.yaml`, and read `requirements.txt` for package dependencies before deploy. For add some dependency directly add it to `requirements.txt`.
 
 ### Create new function
 
@@ -188,6 +196,14 @@ After new checkout this file must be decripted for deploy ny command
 ```bash
 # Will decript file secrets.dev.yml.encripted to secrets.dev.yml
 serverless decrypt --stage dev --password "Password"
+```
+
+## Tests
+
+For run unit test powered by pytest, simply run
+
+```bash
+make test
 ```
 
 ### Auto-scaling
