@@ -14,7 +14,7 @@ This tutorial use `make` util (it available for linux and windows) to create one
 but if you prefer type commands by self or not want to use `make`
 you can read all command in `Makefile`. Format of file trying to be self decriptive and easy to understand for new commers.
 
-### Fast setup
+### Quick Start
 
 Just go step by step and you will deploy you function to AWS
 
@@ -33,8 +33,7 @@ make console
 # app and org you can find into you dashboard.serverless.com
 
 # Then deploy you function to AWS, run on local machine console, not in docker
-serverless login
-# will run serverless deploy
+serverless deploy
 ```
 
 ### Setup local enviroment
