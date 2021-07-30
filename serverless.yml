@@ -27,6 +27,7 @@ plugins:
 provider:
   name: aws
   runtime: python3.8
+  region: eu-central-1
   lambdaHashingVersion: 20201221
   
   stage: ${opt:stage, 'dev'}
@@ -41,21 +42,16 @@ provider:
   # you can overwrite defaults here
   # region: us-east-1
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
+  # you can add statements to the Lambda function's IAM Role here
+  iamRoleStatements:
+    # - Effect: "Allow"
+    #   Action:
+    #     - "s3:ListBucket"
+    #  Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+    - Effect: "Allow"
+      Action:
+        - "s3:PutObject"
+      Resource: arn:aws:s3:::python-botstrap-example-bucket/*
 
 # you can add packaging information here
 package:
@@ -114,13 +110,20 @@ functions:
     environment:
       STAGE: ${self:provider.stage}
   
+  saveS3Model:
+    handler: handler.save_s3_model
+    events:
+      - httpApi:
+          path: /saveS3Model
+          method: post
+  
 # you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
+resources:
+ Resources:
+   PythonBotstrapExampleBucket:
+     Type: AWS::S3::Bucket
+     Properties:
+       BucketName: python-botstrap-example-bucket
 #  Outputs:
 #     NewOutput:
 #       Description: "Description for the output"
@@ -128,4 +131,22 @@ functions:
 
 custom:
   pythonRequirements:
-    dockerizePip: non-linux
+    dockerizePip: true
+    usePipenv: true
+    zip: true
+    slim: true
+    strip: false
+    noDeploy:
+      - docutils
+      - jmespath
+      - pip
+      - python-dateutil
+      - setuptools
+      - six
+      - tensorboard
+      - pipenv
+      - pytest
+      - moto
+    useStaticCache: true
+    useDownloadCache: true
+    cacheLocation: "./cache"

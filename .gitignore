@@ -132,3 +132,7 @@ dmypy.json
 node_modules/
 
 .serverless
+
+# Serverless deploy
+cache/
+.requirements.zip

@@ -5,6 +5,9 @@ name = "pypi"
 
 [packages]
 numpy = "*"
+boto3 = "*"
+moto = {extras = ["s3"], version = "*"}
+pytest = "*"
 
 [dev-packages]
 

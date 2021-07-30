@@ -15,7 +15,7 @@ RUN npm i
 
 FROM base as second
 
-RUN pip install pipenv pytest
+RUN pip install pipenv
 
 COPY Pipfile Pipfile.lock /app/
 
