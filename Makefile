@@ -8,7 +8,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 setup:
-	./bin/setup.sh
+	./setup-env.sh
 
 read-local-enviroment:
 	. ./dev.env && echo "$$SECRET_FUNCTION_TOKEN"
