@@ -7,6 +7,7 @@ Contains:
 * python enviroment setup
 * Enviroment variables - setup for work with enviroment variables, you can setup their local and in produciton
 * Encripted file variables - setup for store variables in encripted file
+* Store model in S3 Bucket - setup configuration for store and serve model in S3 Bucket
 
 ## Servless from scratch tutorial
 
@@ -14,13 +15,13 @@ This tutorial use `make` util (it available for linux and windows) to create one
 but if you prefer type commands by self or not want to use `make`
 you can read all command in `Makefile`. Format of file trying to be self decriptive and easy to understand for new commers.
 
-### Fast setup
+### Quick Start
 
 Just go step by step and you will deploy you function to AWS
 
 ```bash
-git clone https://github.com/LeoVS09/serverless-aws-node-bootstrap.git
-cd ./serverless-aws-node-bootstrap
+git clone https://github.com/LeoVS09/serverless-aws-python-neural-network-bootstrap.git
+cd ./serverless-aws-python-neural-network-bootstrap
 
 # Genereta enviroment template
 make setup
@@ -33,8 +34,7 @@ make console
 # app and org you can find into you dashboard.serverless.com
 
 # Then deploy you function to AWS, run on local machine console, not in docker
-serverless login
-# will run serverless deploy
+serverless deploy
 ```
 
 ### Setup local enviroment
@@ -88,6 +88,14 @@ You can use predefined `make` command for it
 
 ```bash
 sls create function -f newFunction --handler api/functionc/index 
+```
+
+### Create S3 Bucket
+
+Serverless not will create S3 bucket by self, so need run command for create it
+
+```bash
+aws s3api create-bucket --bucket neural-networks-model-example --region eu-central-1 --create-bucket-configuration LocationConstraint=eu-central-1
 ```
 
 ### Serverless tips
