@@ -8,6 +8,7 @@ Contains:
 * Enviroment variables - setup for work with enviroment variables, you can setup their local and in produciton
 * Encripted file variables - setup for store variables in encripted file
 * Store model in S3 Bucket - setup configuration for store and serve model in S3 Bucket
+* Tests - you can develop you function by run test of functions locally
 
 ## Servless from scratch tutorial
 
@@ -78,6 +79,13 @@ Login to serverless
 serverless login
 ```
 
+### Dependencies
+
+For manage dependencies used few tools: `pipenv` and `serverless-python-requirements`
+
+* `pipenv` - allow install dependencies locally and in docker, manage virtual enviroment and lock file for control dependencies. It uses Pipfile and Pipfile.lock. For install some package justt use `pipenv install <package>`
+* `serverless-python-requirements` - install and package dependencies for your lambda function before deploy. It configurated in `serverless.yaml`, and read `Pipfile.lock` for package dependencies before deploy.
+
 ### Create new function
 
 You can create new function by `sls create` command
@@ -92,7 +100,7 @@ sls create function -f newFunction --handler api/functionc/index
 
 ### Create S3 Bucket
 
-Serverless not will create S3 bucket by self, so need run command for create it
+**Serverless will create S3 bucket by self**, by specified resouce configuration, but you also can use
 
 ```bash
 aws s3api create-bucket --bucket neural-networks-model-example --region eu-central-1 --create-bucket-configuration LocationConstraint=eu-central-1
@@ -197,6 +205,14 @@ After new checkout this file must be decripted for deploy ny command
 ```bash
 # Will decript file secrets.dev.yml.encripted to secrets.dev.yml
 serverless decrypt --stage dev --password "Password"
+```
+
+## Tests
+
+For run unit test powered by `pytest` and `moto`, simply run
+
+```bash
+make test
 ```
 
 ### Auto-scaling

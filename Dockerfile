@@ -13,7 +13,15 @@ WORKDIR /app
 COPY package.json package-lock.json /app/
 RUN npm i
 
-FROM base
+FROM base as second
+
+RUN pip install pipenv
+
+COPY Pipfile Pipfile.lock /app/
+
+RUN pipenv install --system
+
+FROM second
 
 COPY . /app
 
