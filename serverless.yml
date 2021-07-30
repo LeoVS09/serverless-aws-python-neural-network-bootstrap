@@ -55,17 +55,19 @@ provider:
 
 # you can add packaging information here
 package:
- patterns:
-    - node_modules/**
-    - .idea/**
-    - .requirements/**
-    - env/**
-    - README.md
+  individually: false
+  exclude:
     - package.json
-    - package-lock.json
-    - requirements.txt
-    - .env
-    - bin/**
+    - package-log.json
+    - node_modules/**
+    - cache/**
+    - test/**
+    - __pycache__/**
+    - .pytest_cache/**
+    - model/pytorch_model.bin
+    - raw/**
+    - .vscode/**
+    - .ipynb_checkpoints/**
 
 functions:
   hello:
