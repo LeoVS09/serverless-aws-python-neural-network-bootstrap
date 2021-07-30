@@ -19,8 +19,8 @@ you can read all command in `Makefile`. Format of file trying to be self decript
 Just go step by step and you will deploy you function to AWS
 
 ```bash
-git clone https://github.com/LeoVS09/serverless-aws-node-bootstrap.git
-cd ./serverless-aws-node-bootstrap
+git clone https://github.com/LeoVS09/serverless-aws-python-bootstrap.git
+cd ./serverless-aws-python-bootstrap
 
 # Genereta enviroment template
 make setup
