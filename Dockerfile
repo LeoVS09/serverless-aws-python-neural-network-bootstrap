@@ -1,7 +1,7 @@
-FROM python:3.10.0b4 as base
+FROM tensorflow/tensorflow:2.5.0-gpu as base
 
 RUN apt update && apt upgrade -y && \
-   apt install -y bash bash-completion make curl wget
+   apt install -y bash bash-completion make curl wget git
 
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
 RUN apt install -y nodejs
@@ -15,15 +15,17 @@ RUN npm i
 
 FROM base as second
 
-RUN pip install pipenv
+COPY dev.requirements.txt /app/
 
-COPY Pipfile Pipfile.lock /app/
+RUN pip3 install -r dev.requirements.txt
 
-RUN pipenv install --system
+RUN jupyter contrib nbextension install --user && \
+    jupyter nbextension enable autoscroll/main && \
+    jupyter serverextension enable --py jupyter_http_over_ws
 
 FROM second
 
 COPY . /app
 
-CMD ["bash"]
+CMD [ "make", "notebook" ]
 

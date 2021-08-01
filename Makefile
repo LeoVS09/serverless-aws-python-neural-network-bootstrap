@@ -1,7 +1,7 @@
  
 #!/usr/bin/env make
 
-.PHONY: setup read-local-enviroment docker-console console install
+.PHONY: setup start read-local-enviroment docker-console console install attach-console save-dependencies
 
 # ---------------------------------------------------------------------------------------------------------------------
 # SETUP
@@ -13,18 +13,37 @@ setup:
 read-local-enviroment:
 	. ./dev.env && echo "$$SECRET_FUNCTION_TOKEN"
 
+# ---------------------------------------------------------------------------------------------------------------------
+# DEVELOPMENT
+# ---------------------------------------------------------------------------------------------------------------------
+
+
+# Will start notebook environment on http://0.0.0.0:8895
+notebook: 
+	jupyter notebook --ip=0.0.0.0 --NotebookApp.allow_origin='https://colab.research.google.com' --allow-root --port=8895 --NotebookApp.port_retries=0
+
+
 install: 
-	pipenv install --system
+	pip install -r dev.requirements.txt
+
+save-dependencies:
+	pip freeze > dev.requirements.txt
+	pip freeze | sed 's/==.*//g' > dev.requirements-unfized.txt
 
 # ---------------------------------------------------------------------------------------------------------------------
 # DOCKER
 # ---------------------------------------------------------------------------------------------------------------------
 
+start:
+	docker-compose up --build
+
 docker-console:
-	docker-compose run --service-ports serverless-dev-enviroment bash
+	docker-compose run --service-ports dev-enviroment bash
 
 console: docker-console
 
+attach-console:
+	docker exec -it serverless-aws-python-neural-network-bootstrap_dev-enviroment_1 bash
 
 chmod:
 	chmod -R 777 .

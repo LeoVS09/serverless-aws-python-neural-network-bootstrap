@@ -51,7 +51,7 @@ provider:
     - Effect: "Allow"
       Action:
         - "s3:PutObject"
-      Resource: arn:aws:s3:::python-botstrap-example-bucket/*
+      Resource: arn:aws:s3:::neural-networks-model-example/*
 
 # you can add packaging information here
 package:
@@ -125,7 +125,7 @@ resources:
    PythonBotstrapExampleBucket:
      Type: AWS::S3::Bucket
      Properties:
-       BucketName: python-botstrap-example-bucket
+       BucketName: neural-networks-model-example
 #  Outputs:
 #     NewOutput:
 #       Description: "Description for the output"
@@ -134,7 +134,7 @@ resources:
 custom:
   pythonRequirements:
     dockerizePip: true
-    usePipenv: true
+    usePipenv: false
     zip: true
     slim: true
     strip: false
@@ -149,6 +149,12 @@ custom:
       - pipenv
       - pytest
       - moto
+      - jupyterlab
+      - jupyter-contrib-nbextensions
+      - jupyter-http-over-ws
+      - anyio
+      - nbclient
+      - prompt_toolkit
     useStaticCache: true
     useDownloadCache: true
     cacheLocation: "./cache"
