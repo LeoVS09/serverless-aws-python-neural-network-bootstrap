@@ -8,12 +8,20 @@ RUN apt install -y nodejs
 
 RUN npm i -g serverless
 
+## Install aws cli
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install && \
+    echo "Run aws configure for login"
+
 WORKDIR /app 
 
 COPY package.json package-lock.json /app/
 RUN npm i
 
 FROM base as second
+
+RUN pip3 install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
 
 COPY dev.requirements.txt /app/
 

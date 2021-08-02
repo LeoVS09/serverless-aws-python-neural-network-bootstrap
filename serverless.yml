@@ -11,7 +11,7 @@
 #
 # Happy Coding!
 
-service: serverless-aws-python-bootstrap
+service: sls-aws-py-nn-bootstrap
 # app and org for use with dashboard.serverless.com
 app: example
 org: leovs09
@@ -50,12 +50,15 @@ provider:
     #  Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
     - Effect: "Allow"
       Action:
-        - "s3:PutObject"
+        - "s3:GetObject"
       Resource: arn:aws:s3:::neural-networks-model-example/*
 
 # you can add packaging information here
 package:
   individually: false
+  patterns:
+    - 'src/**'
+    - 'handler.py'
   exclude:
     - package.json
     - package-log.json
@@ -68,17 +71,22 @@ package:
     - raw/**
     - .vscode/**
     - .ipynb_checkpoints/**
+    - models/
+    - trained_model/
+    - squad-distilbert.tar.gz
 
 functions:
-  hello:
-    handler: handler.hello
+  predict_answer:
+    handler: handler.predict_answer
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
+    memorySize: 3008
+    timeout: 60
     events:
       - httpApi:
-          path: /hello
-          method: get
+          path: /answer
+          method: post
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
 #      - schedule: rate(10 minutes)
@@ -112,17 +120,17 @@ functions:
     environment:
       STAGE: ${self:provider.stage}
   
-  saveS3Model:
-    handler: handler.save_s3_model
-    events:
-      - httpApi:
-          path: /saveS3Model
-          method: post
+  # saveS3Model:
+  #   handler: handler.save_s3_model
+  #   events:
+  #     - httpApi:
+  #         path: /saveS3Model
+  #         method: post
   
 # you can add CloudFormation resource templates here
 resources:
  Resources:
-   PythonBotstrapExampleBucket:
+   NeuralNetworkExampleBucket:
      Type: AWS::S3::Bucket
      Properties:
        BucketName: neural-networks-model-example

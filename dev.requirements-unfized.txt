@@ -15,9 +15,12 @@ cachetools
 certifi
 cffi
 chardet
+chart-studio
 click
+colorlover
 contextvars
 cryptography
+cufflinks
 dataclasses
 decorator
 defusedxml
@@ -38,6 +41,7 @@ iniconfig
 ipykernel
 ipython
 ipython-genutils
+ipywidgets
 jedi
 Jinja2
 jmespath
@@ -56,6 +60,7 @@ jupyter-server
 jupyterlab
 jupyterlab-pygments
 jupyterlab-server
+jupyterlab-widgets
 keras-nightly
 Keras-Preprocessing
 keyring
@@ -76,11 +81,13 @@ numpy
 oauthlib
 opt-einsum
 packaging
+pandas
 pandocfilters
 parso
 pexpect
 pickleshare
 Pillow
+plotly
 pluggy
 prometheus-client
 prompt-toolkit
@@ -107,6 +114,7 @@ requests
 requests-oauthlib
 requests-unixsocket
 responses
+retrying
 rsa
 s3transfer
 sacremoses
@@ -114,6 +122,7 @@ SecretStorage
 Send2Trash
 six
 sniffio
+tenacity
 tensorboard
 tensorboard-data-server
 tensorboard-plugin-wit
@@ -137,6 +146,7 @@ wcwidth
 webencodings
 websocket-client
 Werkzeug
+widgetsnbextension
 wrapt
 xmltodict
 zipp
