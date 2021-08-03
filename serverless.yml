@@ -11,7 +11,7 @@
 #
 # Happy Coding!
 
-service: serverless-aws-python-bootstrap
+service: sls-aws-py-nn-bootstrap
 # app and org for use with dashboard.serverless.com
 app: example
 org: leovs09
@@ -20,9 +20,6 @@ org: leovs09
 # Check out our docs for more details
 frameworkVersion: '2'
 useDotenv: false
-
-plugins:
-  - serverless-python-requirements
 
 provider:
   name: aws
@@ -35,12 +32,10 @@ provider:
   apiGateway:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
   
+  timeout: 60
   # environment:
     # you can define service wide environment variables here
     # SECRET_SERVICE_KEY: secret_key
-
-  # you can overwrite defaults here
-  # region: us-east-1
 
   # you can add statements to the Lambda function's IAM Role here
   iamRoleStatements:
@@ -50,35 +45,26 @@ provider:
     #  Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
     - Effect: "Allow"
       Action:
-        - "s3:PutObject"
-      Resource: arn:aws:s3:::python-botstrap-example-bucket/*
-
-# you can add packaging information here
-package:
-  individually: false
-  exclude:
-    - package.json
-    - package-log.json
-    - node_modules/**
-    - cache/**
-    - test/**
-    - __pycache__/**
-    - .pytest_cache/**
-    - model/pytorch_model.bin
-    - raw/**
-    - .vscode/**
-    - .ipynb_checkpoints/**
+        - "s3:GetObject"
+      Resource: arn:aws:s3:::neural-networks-model-example/*
+  
+  ecr:
+    images:
+      predict_answer: ./
 
 functions:
-  hello:
-    handler: handler.hello
+  predict_answer:
+    image:
+      name: predict_answer
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
+    memorySize: 3008
+    timeout: 120
     events:
       - httpApi:
-          path: /hello
-          method: get
+          path: /answer
+          method: post
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
 #      - schedule: rate(10 minutes)
@@ -112,43 +98,21 @@ functions:
     environment:
       STAGE: ${self:provider.stage}
   
-  saveS3Model:
-    handler: handler.save_s3_model
-    events:
-      - httpApi:
-          path: /saveS3Model
-          method: post
+  # saveS3Model:
+  #   handler: handler.save_s3_model
+  #   events:
+  #     - httpApi:
+  #         path: /saveS3Model
+  #         method: post
   
 # you can add CloudFormation resource templates here
 resources:
  Resources:
-   PythonBotstrapExampleBucket:
+   NeuralNetworkExampleBucket:
      Type: AWS::S3::Bucket
      Properties:
-       BucketName: python-botstrap-example-bucket
+       BucketName: neural-networks-model-example
 #  Outputs:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
-
-custom:
-  pythonRequirements:
-    dockerizePip: true
-    usePipenv: true
-    zip: true
-    slim: true
-    strip: false
-    noDeploy:
-      - docutils
-      - jmespath
-      - pip
-      - python-dateutil
-      - setuptools
-      - six
-      - tensorboard
-      - pipenv
-      - pytest
-      - moto
-    useStaticCache: true
-    useDownloadCache: true
-    cacheLocation: "./cache"

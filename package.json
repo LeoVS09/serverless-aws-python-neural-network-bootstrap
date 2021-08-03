@@ -1,10 +1,7 @@
 {
-    "name": "serverless-aws-python-neural-network-bootstrap",
+    "name": "sls-aws-py-nn-bootstrap",
     "version": "0.1.0",
     "description": "About Base setup of environment and tools to start develop on lambda functions with neural network under the hood from zero configuration",
     "author": "",
-    "license": "MIT",
-    "dependencies": {
-      "serverless-python-requirements": "^3.0.5"
-    }
+    "license": "MIT"
 }

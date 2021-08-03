@@ -9,6 +9,7 @@ Contains:
 * Encripted file variables - setup for store variables in encripted file
 * Store model in S3 Bucket - setup configuration for store and serve model in S3 Bucket
 * Tests - you can develop you function by run test of functions locally
+* Jupyter Notebook - in docker built-in notebook
 
 ## Servless from scratch tutorial
 
@@ -28,8 +29,8 @@ cd ./serverless-aws-python-neural-network-bootstrap
 make setup
 # Write you secrets to '.env' file
 
-# Then start docker container with installed dependencies
-make console
+# Start notebook
+make start
 
 # Write you project name, app, org into serverless.yml
 # app and org you can find into you dashboard.serverless.com
@@ -59,7 +60,9 @@ This will achive you prevent problems:
 Start docker container, sync all local files, get console inside
 
 ```bash
-make console
+make start # will start notebook
+
+make attach-console # will attach current console to running container
 ```
 
 ### Deploy you serverless functions
@@ -81,10 +84,9 @@ serverless login
 
 ### Dependencies
 
-For manage dependencies used few tools: `pipenv` and `serverless-python-requirements`
+For manage dependencies used `serverless-python-requirements`
 
-* `pipenv` - allow install dependencies locally and in docker, manage virtual enviroment and lock file for control dependencies. It uses Pipfile and Pipfile.lock. For install some package justt use `pipenv install <package>`
-* `serverless-python-requirements` - install and package dependencies for your lambda function before deploy. It configurated in `serverless.yaml`, and read `Pipfile.lock` for package dependencies before deploy.
+* `serverless-python-requirements` - install and package dependencies for your lambda function before deploy. It configurated in `serverless.yaml`, and read `requirements.txt` for package dependencies before deploy. For add new dependency update `requirements.txt`.
 
 ### Create new function
 
@@ -213,6 +215,12 @@ For run unit test powered by `pytest` and `moto`, simply run
 
 ```bash
 make test
+```
+
+After successful deployment, you can test your service remotely by using the following command:
+
+```bash
+sls invoke --function hello
 ```
 
 ### Auto-scaling

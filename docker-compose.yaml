@@ -2,10 +2,12 @@ version: "3.9"
 
 services:
 
-   serverless-dev-enviroment:
-      build: .
+   dev-enviroment:
+      build: 
+        context: .
+        dockerfile: dev.Dockerfile
       ports:
-        - 8080:8080
+        - 8895:8895
       runtime: nvidia
       volumes:
         - .:/app/.

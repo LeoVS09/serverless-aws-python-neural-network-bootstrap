@@ -1,29 +1,15 @@
-FROM python:3.10.0b4 as base
+FROM public.ecr.aws/lambda/python:3.8 AS base
 
-RUN apt update && apt upgrade -y && \
-   apt install -y bash bash-completion make curl wget
+COPY requirements.txt ./
 
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
-RUN apt install -y nodejs
+RUN pip3 install -r requirements.txt
 
-RUN npm i -g serverless
+FROM base
 
-WORKDIR /app 
+COPY ./trained_model/*.json ./trained_model/*.txt ./trained_model/
 
-COPY package.json package-lock.json /app/
-RUN npm i
+COPY handler.py ./
 
-FROM base as second
+COPY src ./src/
 
-RUN pip install pipenv
-
-COPY Pipfile Pipfile.lock /app/
-
-RUN pipenv install --system
-
-FROM second
-
-COPY . /app
-
-CMD ["bash"]
-
+CMD ["handler.predict_answer"]
