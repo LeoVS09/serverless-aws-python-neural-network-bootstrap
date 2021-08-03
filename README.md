@@ -4,12 +4,13 @@ About Base setup of environment and tools to start develop on lambda functions w
 
 Contains:
 
-* python enviroment setup
+* Python enviroment setup
 * Enviroment variables - setup for work with enviroment variables, you can setup their local and in produciton
 * Encripted file variables - setup for store variables in encripted file
 * Store model in S3 Bucket - setup configuration for store and serve model in S3 Bucket
 * Tests - you can develop you function by run test of functions locally
 * Jupyter Notebook - in docker built-in notebook
+* Pack dependencies in custom docker image - you can use `serverless-python-requirements` for pack requirements, but AWS have limit for 250 Mb. In our case used `transformers` and `torch` libraries, which have zipped size more then 600 MB.
 
 ## Servless from scratch tutorial
 
@@ -243,3 +244,7 @@ serverless deploy
 
 # 'export' command is valid only for unix shells. In Windows - use 'set' instead of 'export'
 ```
+
+## References
+
+* Bootstrap based on two articles how to use model in serverless [newer](https://towardsdatascience.com/serverless-bert-with-huggingface-and-aws-lambda-625193c6cc04) and [older](https://www.philschmid.de/scaling-machine-learning-from-zero-to-hero). Also [notebook](https://colab.research.google.com/drive/1eyVi8tkCr7N-sE-yyhDB_lduowp1EZ78?usp=sharing#scrollTo=pUdW5bwb1qre) for pack model and [example repo](https://github.com/philschmid/serverless-bert-with-huggingface-aws-lambda). Thanks [Philipp Schmid](https://github.com/philschmid) for his work.
