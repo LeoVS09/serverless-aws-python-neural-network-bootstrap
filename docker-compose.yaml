@@ -3,7 +3,9 @@ version: "3.9"
 services:
 
    dev-enviroment:
-      build: .
+      build: 
+        context: .
+        dockerfile: dev.Dockerfile
       ports:
         - 8895:8895
       runtime: nvidia

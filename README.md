@@ -10,6 +10,7 @@ Contains:
 * Store model in S3 Bucket - setup configuration for store and serve model in S3 Bucket
 * Tests - you can develop you function by run test of functions locally
 * Jupyter Notebook - in docker built-in notebook
+
 ## Servless from scratch tutorial
 
 This tutorial use `make` util (it available for linux and windows) to create one file which commands you can use,
@@ -214,6 +215,12 @@ For run unit test powered by `pytest` and `moto`, simply run
 
 ```bash
 make test
+```
+
+After successful deployment, you can test your service remotely by using the following command:
+
+```bash
+sls invoke --function hello
 ```
 
 ### Auto-scaling

@@ -21,9 +21,6 @@ org: leovs09
 frameworkVersion: '2'
 useDotenv: false
 
-plugins:
-  - serverless-python-requirements
-
 provider:
   name: aws
   runtime: python3.8
@@ -39,9 +36,6 @@ provider:
     # you can define service wide environment variables here
     # SECRET_SERVICE_KEY: secret_key
 
-  # you can overwrite defaults here
-  # region: us-east-1
-
   # you can add statements to the Lambda function's IAM Role here
   iamRoleStatements:
     # - Effect: "Allow"
@@ -52,32 +46,15 @@ provider:
       Action:
         - "s3:GetObject"
       Resource: arn:aws:s3:::neural-networks-model-example/*
-
-# you can add packaging information here
-package:
-  individually: false
-  patterns:
-    - 'src/**'
-    - 'handler.py'
-  exclude:
-    - package.json
-    - package-log.json
-    - node_modules/**
-    - cache/**
-    - test/**
-    - __pycache__/**
-    - .pytest_cache/**
-    - model/pytorch_model.bin
-    - raw/**
-    - .vscode/**
-    - .ipynb_checkpoints/**
-    - models/
-    - trained_model/
-    - squad-distilbert.tar.gz
+  
+  ecr:
+    images:
+      predict_answer: ./
 
 functions:
   predict_answer:
-    handler: handler.predict_answer
+    image:
+      name: predict_answer
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -138,31 +115,3 @@ resources:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
-
-custom:
-  pythonRequirements:
-    dockerizePip: true
-    usePipenv: false
-    zip: true
-    slim: true
-    strip: false
-    noDeploy:
-      - docutils
-      - jmespath
-      - pip
-      - python-dateutil
-      - setuptools
-      - six
-      - tensorboard
-      - pipenv
-      - pytest
-      - moto
-      - jupyterlab
-      - jupyter-contrib-nbextensions
-      - jupyter-http-over-ws
-      - anyio
-      - nbclient
-      - prompt_toolkit
-    useStaticCache: true
-    useDownloadCache: true
-    cacheLocation: "./cache"
