@@ -32,6 +32,7 @@ provider:
   apiGateway:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
   
+  timeout: 60
   # environment:
     # you can define service wide environment variables here
     # SECRET_SERVICE_KEY: secret_key
@@ -59,7 +60,7 @@ functions:
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
     memorySize: 3008
-    timeout: 60
+    timeout: 120
     events:
       - httpApi:
           path: /answer

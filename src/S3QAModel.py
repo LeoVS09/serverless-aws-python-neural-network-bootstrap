@@ -4,16 +4,27 @@ import torch
 import boto3
 import tarfile
 import io
+from .QuestionAnsweringModel import QuestionAnsweringModel
+import os
 
 s3 = boto3.client('s3')
 
 # Baseed on https://github.com/philschmid/serverless-bert-with-huggingface-aws-lambda
 
 
-class S3Model:
+class S3QAModel(QuestionAnsweringModel):
     def __init__(self, model_path=None, s3_bucket=None, file_key=None):
-        self.model, self.tokenizer = self.from_pretrained(
-            model_path, s3_bucket, file_key)
+        if not os.path.isdir(model_path):
+            raise ValueError(f'Model folder: {model_path}, do not exists')
+
+        files = os.listdir(model_path)
+        print('Will load model configuration from', files)
+
+        model, tokenizer = self.from_pretrained(
+            model_path, s3_bucket, file_key
+        )
+
+        super().__init__(model = model, tokenizer = tokenizer)
 
     def from_pretrained(self, model_path: str, s3_bucket: str, file_key: str):
         model = self.load_model_from_s3(model_path, s3_bucket, file_key)
@@ -27,6 +38,7 @@ class S3Model:
         obj = s3.get_object(Bucket=s3_bucket, Key=file_key)
         bytestream = io.BytesIO(obj['Body'].read())
         tar = tarfile.open(fileobj=bytestream, mode="r:gz")
+        
         config = AutoConfig.from_pretrained(f'{model_path}/config.json')
         
         for member in tar.getmembers():
@@ -34,27 +46,16 @@ class S3Model:
                 f = tar.extractfile(member)
                 state = torch.load(io.BytesIO(f.read()))
                 model = AutoModelForQuestionAnswering.from_pretrained(
-                    pretrained_model_name_or_path=None, state_dict=state, config=config)
+                    pretrained_model_name_or_path=None, state_dict=state, config=config
+                )
+        
         return model
 
     def load_tokenizer(self, model_path: str):
-        tokenizer = AutoTokenizer.from_pretrained(model_path)
+        tokenizer = AutoTokenizer.from_pretrained(
+            model_path,
+            # solve Exception: No such file or directory (os error 2), 
+            # simular to https://github.com/VinAIResearch/PhoBERT/issues/26 
+            use_fast=False
+        )
         return tokenizer
-
-    def encode(self, question, context):
-        encoded = self.tokenizer.encode_plus(question, context)
-        return encoded["input_ids"], encoded["attention_mask"]
-
-    def decode(self, token):
-        answer_tokens = self.tokenizer.convert_ids_to_tokens(
-            token, skip_special_tokens=True)
-        return self.tokenizer.convert_tokens_to_string(answer_tokens)
-
-    def predict(self, question, context):
-        input_ids, attention_mask = self.encode(question, context)
-        start_scores, end_scores = self.model(torch.tensor(
-            [input_ids]), attention_mask=torch.tensor([attention_mask]))
-        ans_tokens = input_ids[torch.argmax(
-            start_scores): torch.argmax(end_scores)+1]
-        answer = self.decode(ans_tokens)
-        return answer
