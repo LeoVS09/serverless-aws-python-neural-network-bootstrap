@@ -19,7 +19,8 @@ org: leovs09
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
 frameworkVersion: '2'
-useDotenv: false
+useDotenv: true
+configValidationMode: error
 
 plugins:
   - serverless-python-requirements
@@ -43,31 +44,35 @@ provider:
   # region: us-east-1
 
   # you can add statements to the Lambda function's IAM Role here
-  iamRoleStatements:
-    # - Effect: "Allow"
-    #   Action:
-    #     - "s3:ListBucket"
-    #  Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-    - Effect: "Allow"
-      Action:
-        - "s3:PutObject"
-      Resource: arn:aws:s3:::python-botstrap-example-bucket/*
+  iam:
+    role:
+      statements:
+        # - Effect: "Allow"
+        #   Action:
+        #     - "s3:ListBucket"
+        #  Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+        - Effect: "Allow"
+          Action:
+            - "s3:PutObject"
+          Resource: arn:aws:s3:::python-botstrap-example-bucket/*
 
 # you can add packaging information here
 package:
   individually: false
-  exclude:
-    - package.json
-    - package-log.json
-    - node_modules/**
-    - cache/**
-    - test/**
-    - __pycache__/**
-    - .pytest_cache/**
-    - model/pytorch_model.bin
-    - raw/**
-    - .vscode/**
-    - .ipynb_checkpoints/**
+  patterns:
+    - 'handler.py'
+    - 'src/**'
+    - '!package.json'
+    - '!package-log.json'
+    - '!node_modules/**'
+    - '!cache/**'
+    - '!test/**'
+    - '!__pycache__/**'
+    - '!.pytest_cache/**'
+    - '!model/pytorch_model.bin'
+    - '!raw/**'
+    - '!.vscode/**'
+    - '!.ipynb_checkpoints/**'
 
 functions:
   hello:
