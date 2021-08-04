@@ -84,9 +84,7 @@ serverless login
 
 ### Dependencies
 
-For manage dependencies used `serverless-python-requirements`
-
-* `serverless-python-requirements` - install and package dependencies for your lambda function before deploy. It configurated in `serverless.yaml`, and read `requirements.txt` for package dependencies before deploy. For add new dependency update `requirements.txt`.
+For manage dependencies used custom lambda docker image. Image loads dependencies from `requirements.txt` and deploy to AWS ECR image registry.
 
 ### Create new function
 
