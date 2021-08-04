@@ -28,7 +28,7 @@ cd ./serverless-aws-python-neural-network-bootstrap
 
 # Genereta enviroment template
 make setup
-# Write you secrets to '.env' file
+# Write you secrets to '.env.local' file
 
 # Start notebook
 make start
@@ -42,7 +42,7 @@ serverless deploy
 
 ### Setup local enviroment
 
-This command will generate configuration enviroment `.env` file which will be used by docker and serveless
+This command will generate configuration enviroment `.env.local` file which will be used by docker and serveless
 
 ```bash
 make setup
@@ -138,76 +138,11 @@ serverless invoke local --log --function=hello
 
 ### Enviroment variables
 
-You can setup you enviroment variables by set them in serverless.yml file
+You can add `.env` file and all variables will be loaded into your lambdas, also you can reference them in config.
 
 ```yml
-    enviroment:
-      SECRET_FUNCTION_TOKEN: ${env:SECRET_FUNCTION_TOKEN}
-      STAGE: ${self:provider.stage}
-```
-
-where ${env:<NAME>} local enviroment variables which must be passed
-*you can define them in AWS cloud* [aws docs](https://docs.aws.amazon.com/en_us/lambda/latest/dg/env_variables.html)
-
-For local development we must paste them in KEY:VALUES pairs
-
-```bash
-serverless invoke local --function=hello --log -e SECRET_FUNCTION_TOKEN=VALUE OTHER_ENVIROMENT_VARIBLE=ANOTHER_VALUE
-```
-
-For setup it from file we maked `dev.env` file which will be readed by make command `read-local-enviroment`
-
-So you can just run it by
-
-```bash
-make local-env hello
-# . ./dev.env && serverless invoke local --log -e SECRET_FUNCTION_TOKEN="$$SECRET_FUNCTION_TOKEN" --function=hello
-```
-
-### Encription
-
-If you want to store you project in open source, you might be able to store secret tokens and keys.
-You store them in file `secrets.dev.yml` (for developement as example) and encrit to save it in version control (git)
-
-`make setup` command was create for you example file `secrets.dev.yml`.
-
-```yml
-SECRET_SERVICE_KEY: SOME_SECRET_KEY
-```
-
-This file will be used to ush secret variables to enviroment variables of you function
-
-```yml
-custom:
-  secrets: ${file(secrets.${opt:stage, self:provider.stage}.yml)}
-# ...
-enviroment:
-    SECRET_SERVICE_KEY: ${self:custom.secrets.SECRET_SERVICE_KEY}
-```
-
-And when you will run `serverless deploy` it will push variables from file
-
-If you can store and push variables for defferent stages by add stage parameter to deploy
-
-```bash
-# will read secrets from secrets.prod.yml file
-serverless deploy --stage prod 
-```
-
-Also you can encript file by password
-
-```bash
-# Will generate secrets.dev.yml.encripted
-serverless encrypt --stage dev --password "Password"
-```
-
-And add `secrets.dev.yml.encripted file to git
-
-After new checkout this file must be decripted for deploy ny command
-
-```bash
-# Will decript file secrets.dev.yml.encripted to secrets.dev.yml
-serverless decrypt --stage dev --password "Password"
+# serverless.yaml
+  SECRET_FUNCTION_TOKEN: ${env:SECRET_FUNCTION_TOKEN}
 ```
 
 ## Tests
