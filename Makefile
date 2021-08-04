@@ -1,7 +1,7 @@
  
 #!/usr/bin/env make
 
-.PHONY: setup start read-local-enviroment docker-console console install attach-console save-dependencies
+.PHONY: setup start docker-console console install attach-console save-dependencies
 
 # ---------------------------------------------------------------------------------------------------------------------
 # SETUP
@@ -10,18 +10,13 @@
 setup:
 	./setup-env.sh
 
-read-local-enviroment:
-	. ./dev.env && echo "$$SECRET_FUNCTION_TOKEN"
-
 # ---------------------------------------------------------------------------------------------------------------------
 # DEVELOPMENT
 # ---------------------------------------------------------------------------------------------------------------------
 
-
 # Will start notebook environment on http://0.0.0.0:8895
 notebook: 
 	jupyter notebook --ip=0.0.0.0 --NotebookApp.allow_origin='https://colab.research.google.com' --allow-root --port=8895 --NotebookApp.port_retries=0
-
 
 install: 
 	pip install -r dev.requirements.txt
@@ -100,26 +95,6 @@ local:
 # Example: make local-env hello
 local-env:
 	. ./dev.env && serverless invoke local --log -e SECRET_FUNCTION_TOKEN="$$SECRET_FUNCTION_TOKEN" --function=$(call args)
-
-# --------------------------------------------------- ENCRIPTION ---------------------------------------------------------
-
-# run command like that `make encript-dev 123`
-
-# Encript dev stage secret file with given password
-encript-dev:
-	serverless encrypt --stage dev --password $(call args)
-
-# Decript prod stage secrets file with given password
-decript-dev:
-	serverless decrypt --stage dev --password $(call args)
-
-# Encript prod stage secret file with given password
-encript-prod:
-	serverless encrypt --stage prod --password $(call args)
-
-# Decript prod stage secrets file with given password
-decript-prod:
-	serverless decrypt --stage prod --password $(call args)
 
 # --------------------------------------------------- TESTS --------------------------------------------------------------- 
 

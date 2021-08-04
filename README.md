@@ -29,9 +29,8 @@ cd ./serverless-aws-python-neural-network-bootstrap
 # Genereta enviroment template
 make setup
 # Write you secrets to '.env.local' file
-
-# Start notebook
-make start
+# and load enviroment variables
+set -o allexport; source ./.env.local; set +o allexport
 
 # Write you project name, app, org into serverless.yml
 # app and org you can find into you dashboard.serverless.com
