@@ -1,7 +1,7 @@
  
 #!/usr/bin/env make
 
-.PHONY: setup read-local-enviroment docker-console console install
+.PHONY: setup docker-console console install
 
 # ---------------------------------------------------------------------------------------------------------------------
 # SETUP
@@ -9,9 +9,6 @@
 
 setup:
 	./setup-env.sh
-
-read-local-enviroment:
-	. ./dev.env && echo "$$SECRET_FUNCTION_TOKEN"
 
 install: 
 	pipenv install --system
@@ -81,26 +78,6 @@ local:
 # Example: make local-env hello
 local-env:
 	. ./dev.env && serverless invoke local --log -e SECRET_FUNCTION_TOKEN="$$SECRET_FUNCTION_TOKEN" --function=$(call args)
-
-# --------------------------------------------------- ENCRIPTION ---------------------------------------------------------
-
-# run command like that `make encript-dev 123`
-
-# Encript dev stage secret file with given password
-encript-dev:
-	serverless encrypt --stage dev --password $(call args)
-
-# Decript prod stage secrets file with given password
-decript-dev:
-	serverless decrypt --stage dev --password $(call args)
-
-# Encript prod stage secret file with given password
-encript-prod:
-	serverless encrypt --stage prod --password $(call args)
-
-# Decript prod stage secrets file with given password
-decript-prod:
-	serverless decrypt --stage prod --password $(call args)
 
 # --------------------------------------------------- TESTS --------------------------------------------------------------- 
 

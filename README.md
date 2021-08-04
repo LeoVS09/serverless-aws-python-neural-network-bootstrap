@@ -27,9 +27,8 @@ cd ./serverless-aws-python-bootstrap
 # Genereta enviroment template
 make setup
 # Write you secrets to '.env.local' file
-
-# Then start docker container with installed dependencies
-make console
+# and load enviroment variables
+set -o allexport; source ./.env.local; set +o allexport
 
 # Write you project name, app, org into serverless.yml
 # app and org you can find into you dashboard.serverless.com
